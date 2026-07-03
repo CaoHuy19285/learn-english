@@ -1,0 +1,201 @@
+/* Giao diện hệ thống font Inter */
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+body { background-color: #f4f6fc; color: #1e1b4b; }
+
+/* Bố cục chia hai cột ứng dụng */
+.app-layout { display: flex; min-height: 100vh; }
+
+/* SIDEBAR TRÁI CỐ ĐỊNH */
+.sidebar-left {
+    width: 260px; background-color: #1e1b4b; color: white;
+    display: flex; flex-direction: column; padding: 24px 16px;
+    position: fixed; height: 100vh; left: 0; top: 0; z-index: 100;
+}
+.sidebar-left .logo {
+    display: flex; align-items: center; gap: 10px; font-size: 22px;
+    font-weight: 800; padding: 0 10px 32px; color: white;
+}
+.nav-menu { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.nav-item {
+    display: flex; align-items: center; gap: 12px; padding: 12px 16px;
+    color: #94a3b8; text-decoration: none; border-radius: 12px;
+    font-weight: 600; font-size: 15px; transition: all 0.2s;
+}
+.nav-item:hover, .nav-item.active { background-color: #4f46e5; color: white; }
+.menu-divider { font-size: 11px; text-transform: uppercase; color: #64748b; font-weight: 700; margin: 20px 0 5px 12px; letter-spacing: 0.5px; }
+.sidebar-bottom { background: rgba(255,255,255,0.04); padding: 14px; border-radius: 14px; margin-top: auto; }
+.level-info { display: flex; justify-content: space-between; font-size: 13px; font-weight: 500; }
+.progress-bar-small { height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; margin: 8px 0; overflow: hidden; }
+.progress-fill-small { height: 100%; background: #6366f1; }
+.streak-info { font-size: 13px; font-weight: 600; color: #f59e0b; }
+.btn-logout { display: block; text-align: center; color: #f87171; text-decoration: none; margin-top: 12px; font-size: 14px; font-weight: 500; }
+
+/* NỘI DUNG CHÍNH BÊN PHẢI */
+.main-content { margin-left: 260px; flex: 1; padding: 40px 48px; display: flex; flex-direction: column; min-width: 0; }
+.welcome-bar h1 { font-size: 28px; font-weight: 700; color: #1e1b4b; }
+.welcome-bar p { color: #6b7280; font-size: 15px; margin-top: 4px; }
+
+/* Thống kê học tập dạng hàng ngang */
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 24px 0; }
+.stat-card { background: white; padding: 16px 20px; border-radius: 16px; border: 1px solid #e2e8f0; display: flex; align-items: center; gap: 16px; }
+.st-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+.st-icon.icon-purple { background: #e0e7ff; color: #6366f1; }
+.st-icon.icon-orange { background: #fef3c7; color: #f59e0b; }
+.st-icon.icon-green { background: #d1fae5; color: #10b981; }
+.st-icon.icon-gold { background: #fff7ed; color: #ea580c; }
+.st-label { font-size: 13px; color: #6b7280; display: block; font-weight: 500; }
+.st-val { font-size: 22px; font-weight: 700; color: #1e1b4b; }
+
+/* Tiến trình học tập */
+.progress-banner { background: white; padding: 20px; border-radius: 16px; border: 1px solid #e2e8f0; margin-bottom: 24px; }
+.banner-header { display: flex; justify-content: space-between; font-weight: 600; font-size: 14px; }
+.banner-value { color: #6366f1; }
+.banner-subtitle { font-size: 15px; font-weight: 700; margin: 4px 0 12px; }
+.bar-bg { height: 12px; background: #e2e8f0; border-radius: 6px; overflow: hidden; }
+.bar-fill { height: 100%; background: #6366f1; border-radius: 6px; }
+
+/* Từ vựng trong ngày */
+.word-of-the-day { background: #6366f1; color: white; padding: 28px; border-radius: 20px; margin-bottom: 24px; position: relative; }
+.wotd-badge { font-size: 11px; font-weight: 700; background: rgba(255,255,255,0.2); width: fit-content; padding: 4px 10px; border-radius: 20px; margin-bottom: 16px; }
+.wotd-main { display: flex; justify-content: space-between; align-items: flex-start; }
+.wotd-main h2 { font-size: 32px; font-weight: 800; }
+.wotd-ipa { font-size: 16px; opacity: 0.8; margin-top: 2px; }
+.btn-audio { background: rgba(255,255,255,0.2); border: none; width: 40px; height: 40px; border-radius: 50%; color: white; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.wotd-def { font-size: 16px; margin: 16px 0 8px; font-weight: 500; }
+.wotd-example { font-size: 14px; opacity: 0.8; font-style: italic; }
+
+/* GIAO DIỆN ADMIN FORM & BẢNG DỮ LIỆU */
+.admin-card { background: white; padding: 24px; border-radius: 16px; border: 1px solid #e2e8f0; }
+.admin-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 16px; color: #1e1b4b; }
+.inline-form { display: flex; gap: 12px; }
+.form-input, .form-input select { flex: 1; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 14px; outline: none; }
+.form-input:focus { border-color: #6366f1; }
+.btn-primary-action { background: #6366f1; color: white; border: none; padding: 12px 24px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+.btn-primary-action:hover { background: #4f46e5; }
+
+.grid-form { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group label { font-size: 13px; font-weight: 600; color: #475569; }
+.form-textarea { padding: 12px; border: 1px solid #cbd5e1; border-radius: 10px; min-height: 80px; font-size: 14px; outline: none; width: 100%; }
+.full-width { grid-column: span 2; }
+
+/* Bảng dữ liệu */
+.data-table { width: 100%; border-collapse: collapse; text-align: left; margin-top: 8px; }
+.data-table th { background: #f8fafc; padding: 14px; font-size: 13px; font-weight: 600; color: #64748b; border-bottom: 1px solid #e2e8f0; }
+.data-table td { padding: 14px; border-bottom: 1px solid #e2e8f0; font-size: 14px; vertical-align: middle; }
+.table-img-container { width: 44px; height: 44px; border-radius: 8px; background: #f1f5f9; padding: 4px; display: flex; align-items: center; justify-content: center; }
+.table-img-container img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.word-main-title { font-weight: 700; color: #1e1b4b; font-size: 15px; }
+.word-ipa-sub { font-size: 12px; color: #64748b; }
+.badge { font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 20px; width: fit-content; display: inline-block; }
+.badge.purple { background: #e0e7ff; color: #4f46e5; }
+.badge.pink { background: #fce7f3; color: #db2777; }
+.badge.green { background: #d1fae5; color: #065f46; }
+.btn-edit { color: #2563eb; text-decoration: none; font-weight: 600; margin-right: 10px; }
+.btn-delete { color: #dc2626; text-decoration: none; font-weight: 600; }
+
+/* FOOTER ĐƯỢC CHÈN PHÍA DƯỚI CÙNG BÊN PHẢI */
+.app-footer { margin-top: auto; padding-top: 24px; border-top: 1px solid #e2e8f0; }
+.footer-content { display: flex; justify-content: space-between; font-size: 13px; color: #64748b; }
+.footer-links a { color: #64748b; text-decoration: none; margin-left: 16px; }
+
+/* CSS DÀNH RIÊNG CHO TRANG CHỦ INDEX (LANDING PAGE) */
+.landing-body { background: #ffffff; }
+.landing-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 60px; border-bottom: 1px solid #f1f5f9; }
+.landing-logo { display: flex; align-items: center; gap: 8px; font-size: 22px; font-weight: 800; color: #1e1b4b; }
+.landing-nav a { margin: 0 16px; text-decoration: none; color: #475569; font-weight: 600; font-size: 15px; }
+.landing-nav a.active { color: #6366f1; }
+.landing-auth .btn-secondary { text-decoration: none; color: #1e1b4b; font-weight: 600; margin-right: 20px; font-size: 15px; }
+.landing-auth .btn-primary { background: #6366f1; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 15px; }
+.hero-section { text-align: center; padding: 80px 20px; background: linear-gradient(180deg, #f5f7ff 0%, #ffffff 100%); }
+.hero-section h1 { font-size: 44px; font-weight: 800; color: #1e1b4b; line-height: 1.2; }
+.text-gradient { background: linear-gradient(to right, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.hero-section p { color: #64748b; max-width: 640px; margin: 16px auto 0; font-size: 16px; line-height: 1.6; }
+.landing-features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1200px; margin: 0 auto 60px; padding: 0 20px; }
+.feat-card { background: white; border: 1px solid #e2e8f0; padding: 32px 24px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
+.feat-icon { width: 48px; height: 48px; font-size: 24px; display: flex; align-items: center; justify-content: center; border-radius: 12px; margin-bottom: 16px; }
+.feat-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; color: #1e1b4b; }
+.feat-card p { color: #64748b; font-size: 14px; line-height: 1.5; }
+/* Tải phông chữ Inter */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* Thiết lập cơ bản cho Header và Footer */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+.landing-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 60px;
+    border-bottom: 1px solid #f1f5f9;
+    background: #ffffff;
+    /* Hiệu ứng ghim trên cùng */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.landing-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 26px;
+    font-weight: 800;
+    color: #4f46e5; /* Màu tím đậm cho WordWise */
+    text-decoration: none;
+}
+
+.landing-nav {
+    display: flex;
+    gap: 32px;
+}
+
+/* Các nút điều hướng mặc định màu đen */
+.landing-nav a {
+    text-decoration: none;
+    color: #1f2937; /* Màu đen xám */
+    font-weight: 600;
+    font-size: 15px;
+    transition: color 0.3s ease;
+}
+
+/* Mục nào đang active hoặc được hover sẽ hiện màu tím */
+.landing-nav a:hover,
+.landing-nav a.active {
+    color: #4f46e5;
+}
+
+.landing-auth {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.landing-auth .btn-secondary {
+    text-decoration: none;
+    color: #1f2937;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.landing-auth .btn-primary {
+    background: #4f46e5; /* Màu tím cho nút chính */
+    color: white;
+    padding: 10px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    transition: background 0.3s ease;
+}
+
+.landing-auth .btn-primary:hover {
+    background: #3730a3;
+}
+
