@@ -3,9 +3,9 @@
 class Database
 {
     private $host = "localhost";
-    private $username = "root";
-    private $password = "";
-    private $dbname = "wordwise_db";
+    private $username = "pltprov1_jindo_plt_learnenglish";
+    private $password = "14kOC]31]WZAoONf";
+    private $dbname = "pltprov1_jindo_plt_learnenglish";
     public $conn;
 
   public function __construct()
