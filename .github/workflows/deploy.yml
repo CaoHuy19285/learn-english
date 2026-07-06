@@ -1,0 +1,120 @@
+# .github/workflows/php-syntax-check.yml
+name: PHP Syntax Check (CI)
+
+# Kích hoạt quy trình mỗi khi có hành động push hoặc pull request vào nhánh main
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+# Only read access to the source code is required
+permissions:
+  contents: read
+
+# If several pushes happen in a row, cancel the older run to save resources
+concurrency:
+  group: "ci-cd-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  #
+  # JOB 1: CI - runs on every push to the main branch
+  # checkout -> setup PHP -> install -> lint -> test -> build -> upload artifact
+  # If any step fails, the following steps stop and the deploy job will not run.
+  #
+  ci:
+    name: Lint - Test - Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: 1. Checkout code
+        uses: actions/checkout@v4
+
+      - name: 2. Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          tools: composer
+
+      - name: 3. Install dependencies
+        run: composer install --no-progress --prefer-dist
+
+      - name: 4. Check PHP Syntax (Lint)
+        run: |
+          find . -path ./vendor -prune -o -name "*.php" -print0 | xargs -0 -n 1 -P 4 php -l
+
+      - name: 5. Run tests (if any)
+        # Nếu bạn chưa có test, có thể comment dòng này hoặc thay bằng lệnh kiểm tra khác
+        run: |
+          if [ -f "vendor/bin/phpunit" ]; then
+            vendor/bin/phpunit
+          else
+            echo "No PHPUnit found, skipping tests."
+          fi
+
+      - name: 6. Prepare deployment artifact (dist/)
+        run: |
+          mkdir -p dist
+          # Sao chép toàn bộ source, loại trừ các thư mục không cần thiết
+          rsync -av --exclude='.git' \
+                     --exclude='.github' \
+                     --exclude='dist' \
+                     --exclude='.env' \
+                     --exclude='.idea' \
+                     --exclude='node_modules' \
+                     ./ dist/
+
+      - name: 7. Upload build artifact (dist/)
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 1
+
+  #
+  # JOB 2: Deploy - runs ONLY when CI passes AND it is a push to main
+  # (Pull Requests will not deploy, to avoid publishing unmerged code)
+  # Deploys the dist/ directory to cPanel over FTP.
+  #
+  deploy:
+    name: Deploy to cPanel via FTP
+    needs: ci
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 1. Download build artifact (dist/)
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+      - name: 2. Check FTP secrets
+        run: |
+          missing=0
+          for key in FTP_SERVER FTP_USERNAME FTP_PASSWORD FTP_SERVER_DIR; do
+            if [ -z "${!key}" ]; then
+              echo "::error::Secret is not configured: $key"
+              missing=1
+            fi
+          done
+          if [ "$missing" -eq 1 ]; then
+            echo ""
+            echo "Go to Settings -> Secrets and variables -> Actions to add the secrets above."
+            exit 1
+          fi
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_SERVER_DIR: ${{ secrets.FTP_SERVER_DIR }}
+
+      - name: 3. Deploy to cPanel via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./dist/
+          server-dir: ${{ secrets.FTP_SERVER_DIR }}
+          protocol: ftps          # explicit FTPS
+          port: 21                # cổng FTPS
