@@ -2,17 +2,32 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+// Bỏ comment dòng dưới nếu đã có hệ thống login
 if (!isset($_SESSION['user_id'])) {
-    // Nếu có login thì bật dòng dưới lên
-    // header("Location: login.php"); exit();
+    // header("Location: login.php"); 
+    // exit();
+    // Tạm thời nếu chưa login, gán user_id = 2 (hoặc bạn có thể để 0 và hiển thị 0)
+    $user_id = 2; // Ví dụ user demo, bạn có thể thay bằng 0 để hiển thị chưa học
+} else {
+    $user_id = $_SESSION['user_id'];
 }
 
 require_once 'database.php';
 $db = new Database();
 
-// Lấy danh sách danh mục (kèm description) và đếm số từ vựng
-$sql = "SELECT t.*, (SELECT COUNT(*) FROM vocabulary v WHERE v.typeword_id = t.id) as total_words FROM typeword t";
-$categories = $db->select($sql);
+// Lấy danh sách danh mục (kèm description) và đếm số từ vựng, số từ đã học của user hiện tại
+$sql = "SELECT 
+            t.*, 
+            (SELECT COUNT(*) FROM vocabulary v WHERE v.typeword_id = t.id) as total_words,
+            (SELECT COUNT(*) FROM user_progress up 
+             JOIN vocabulary v ON up.vocabulary_id = v.id 
+             WHERE v.typeword_id = t.id 
+               AND up.user_id = ? 
+               AND up.status IN ('learned', 'reviewing', 'mastered')) as learned_words
+        FROM typeword t";
+$params = [$user_id];
+$categories = $db->select($sql, $params);
 
 $color_map = [
     'purple' => ['hex' => '#6366f1', 'bg' => '#e0e7ff'],
@@ -47,10 +62,9 @@ $color_map = [
         .bar-fill { height: 100%; border-radius: 3px; }
         .stats-row { display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; }
         
-        /* Chỉnh phần này rộng full màn hình thay vì max-width: 900px */
         .game-modes-container { display: none; background: white; border-radius: 16px; padding: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); width: 100%; box-sizing: border-box; }
         .game-modes-container h3 { font-size: 16px; margin: 0 0 5px; color: #1e1b4b; }
-        .gm-desc-text { font-size: 14px; color: #64748b; margin-bottom: 20px; font-style: italic; } /* Style cho description */
+        .gm-desc-text { font-size: 14px; color: #64748b; margin-bottom: 20px; font-style: italic; }
 
         .gm-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
         .gm-card { border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; transition: 0.2s; text-decoration: none; display: block; background: white; }
@@ -72,10 +86,10 @@ $color_map = [
         <div class="cat-grid">
             <?php foreach ($categories as $index => $cat): 
                 $theme = isset($color_map[$cat['color_theme'] ?? 'purple']) ? $color_map[$cat['color_theme'] ?? 'purple'] : $color_map['purple'];
-                $learned = ($cat['total_words'] > 0) ? rand(1, $cat['total_words']) : 0; // Giả lập dữ liệu tiến độ
-                $percent = ($cat['total_words'] > 0) ? round(($learned / $cat['total_words']) * 100) : 0;
+                $total = (int)$cat['total_words'];
+                $learned = (int)$cat['learned_words'];
+                $percent = ($total > 0) ? round(($learned / $total) * 100) : 0;
                 
-                // Lấy description nếu có, nếu không thì để trống
                 $desc = isset($cat['description']) ? htmlspecialchars($cat['description'], ENT_QUOTES) : '';
             ?>
                 <div class="cat-card" onclick="selectCategory(this, <?=$cat['id']?>, '<?=htmlspecialchars($cat['name'], ENT_QUOTES)?>', '<?=$desc?>')">
@@ -83,7 +97,7 @@ $color_map = [
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
                     </div>
                     <h3><?=$cat['name']?></h3>
-                    <div class="cat-stats"><?=$learned?>/<?=$cat['total_words']?> words learned</div>
+                    <div class="cat-stats"><?=$learned?>/<?=$total?> words learned</div>
                     <div class="bar-bg">
                         <div class="bar-fill" style="width: <?=$percent?>%; background: <?=$theme['hex']?>;"></div>
                     </div>
@@ -120,17 +134,12 @@ $color_map = [
     </main>
 
     <script>
-        // Cập nhật hàm JS nhận thêm tham số "desc" (description)
         function selectCategory(element, id, name, desc) {
-            // Xóa active các card khác
             document.querySelectorAll('.cat-card').forEach(el => el.classList.remove('active'));
-            // Thêm active cho card được click
             element.classList.add('active');
             
-            // Cập nhật tiêu đề và mô tả
             document.getElementById('gm-title').innerText = name;
             
-            // Hiển thị mô tả nếu có, nếu không có thì ẩn đi cho gọn
             if (desc && desc.trim() !== "") {
                 document.getElementById('gm-desc').innerText = desc;
                 document.getElementById('gm-desc').style.display = 'block';
@@ -138,15 +147,11 @@ $color_map = [
                 document.getElementById('gm-desc').style.display = 'none';
             }
             
-            // Cập nhật các link học tập
             document.getElementById('link-flashcard').href = 'flashcard.php?category_id=' + id;
             document.getElementById('link-quiz').href = 'quiz.php?category_id=' + id;
             document.getElementById('link-match').href = 'match.php?category_id=' + id;
             
-            // Hiển thị khung game modes
             document.getElementById('game-modes').style.display = 'block';
-            
-            // Cuộn mượt xuống phần game modes
             document.getElementById('game-modes').scrollIntoView({ behavior: 'smooth', block: 'end' });
         }
     </script>

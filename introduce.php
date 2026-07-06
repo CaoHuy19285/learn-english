@@ -5,54 +5,197 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Giới thiệu - WordWise</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="public/css/style.css">
-    <style>
-        .grid-2-col { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; max-width: 1000px; margin: 0 auto; padding: 0 20px; }
-        .feature-box { background: #fff; border-radius: 12px; padding: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; transition: transform 0.3s ease; }
-        .feature-box:hover { transform: translateY(-5px); }
-        .feature-box h3 { margin: 15px 0 10px; color: #1e1b4b; font-size: 18px; }
-        .feature-box p { color: #64748b; font-size: 14px; line-height: 1.6; }
-        .page-header { text-align: center; padding: 80px 20px 40px; background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%); }
-        .page-header h1 { font-size: 36px; font-weight: 800; color: #1e1b4b; margin-bottom: 15px; }
-        .page-header p { color: #64748b; max-width: 600px; margin: 0 auto; font-size: 16px; line-height: 1.6; }
-    </style>
+  <style>
+    /* Header của trang */
+    .page-header { 
+        text-align: center; 
+        padding: 80px 20px 50px; 
+        background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%); 
+    }
+    .page-header h1 { 
+        font-size: 40px; 
+        font-weight: 800; 
+        color: #1e1b4b; 
+        margin-bottom: 18px; 
+        letter-spacing: -0.5px;
+    }
+    .page-header p { 
+        color: #475569; 
+        max-width: 650px; 
+        margin: 0 auto; 
+        font-size: 17px; 
+        line-height: 1.7; 
+        text-align: center; /* Giữ tiêu đề phụ căn giữa cho đẹp */
+    }
+
+    /* Container chính */
+    .intro-container { 
+        max-width: 1000px; 
+        margin: 0 auto; 
+        padding: 60px 20px; 
+    }
+
+   
+   /* Phần Câu chuyện / Sứ mệnh */
+    .story-section { 
+        /* Thử nghiệm với đường dẫn lùi 1 cấp và không dùng phủ gradient trắng để xem ảnh */
+        background-image: url('../public/images/Cardmoi_PLT_Trang.png');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        
+        padding: 50px; 
+        border-radius: 20px; 
+        box-shadow: 0 10px 30px rgba(0,0,0,0.03); 
+        border: 1px solid #f1f5f9;
+        margin-bottom: 60px;
+    }
+    .story-section h2 { 
+        color: #1e1b4b; 
+        font-size: 28px; 
+        margin-bottom: 25px; 
+        font-weight: 800; 
+    }
+    .story-section p { 
+        color: #475569; 
+        font-size: 16px; 
+        line-height: 1.8; 
+        margin-bottom: 16px; 
+        text-align: justify; /* Đoạn văn câu chuyện căn lề đều 2 bên */
+    }
+    .story-section p:last-child {
+        margin-bottom: 0;
+    }
+    .highlight-text {
+        color: #4f46e5;
+        font-weight: 600;
+    }
+
+    /* Phần Giá trị cốt lõi */
+    .values-title {
+        text-align: center; 
+        font-size: 28px; 
+        font-weight: 800; 
+        color: #1e1b4b; 
+        margin-bottom: 40px;
+    }
+    .values-grid { 
+        display: grid; 
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 25px; 
+    }
+    .value-card { 
+        background: #f8fafc; 
+        padding: 40px 35px; 
+        border-radius: 16px; 
+        border: 1px solid #e2e8f0; 
+        transition: all 0.3s ease; 
+        position: relative; 
+        overflow: hidden; 
+    }
+    .value-card:hover { 
+        transform: translateY(-5px); 
+        background: #ffffff;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.04);
+        border-color: #cbd5e1;
+    }
+    
+    /* Chữ số in chìm thay thế cho Icon */
+    .value-number { 
+        font-size: 80px; 
+        font-weight: 900; 
+        color: #e0e7ff; 
+        position: absolute; 
+        top: -10px; 
+        right: 15px; 
+        z-index: 0; 
+        line-height: 1; 
+        opacity: 0.6;
+        transition: all 0.3s ease;
+    }
+    .value-card:hover .value-number {
+        color: #c7d2fe;
+        transform: scale(1.1);
+    }
+
+    .value-card h3 { 
+        color: #1e1b4b; 
+        font-size: 20px; 
+        margin-bottom: 15px; 
+        font-weight: 700; 
+        position: relative; 
+        z-index: 1; 
+    }
+
+    /* ĐÃ CẬP NHẬT: Căn lề đều 2 bên cho mô tả trong các ô giá trị (bao gồm đoạn văn xử lý hình ảnh...) */
+    .value-card p { 
+        color: #475569; 
+        font-size: 15px; 
+        line-height: 1.7; 
+        position: relative; 
+        z-index: 1; 
+        margin: 0;
+        text-align: justify; /* Căn lề đều 2 bên (Justify) */
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .values-grid { grid-template-columns: 1fr; }
+        .story-section { padding: 30px; }
+    }
+</style>
 </head>
 <body class="landing-body">
-      <?php include_once "header.php" ?>
-
+    
+    <?php include_once "header.php" ?>
 
     <div class="page-header">
-        <h1>Về WordWise</h1>
-        <p>Sứ mệnh của chúng tôi là giúp việc học ngôn ngữ trở nên dễ dàng, thú vị và mang lại hiệu quả lâu dài thông qua sức mạnh của công nghệ.</p>
+        <h1>Giới thiệu về <span class="text-gradient">WordWise</span></h1>
+        <p>Hành trình thay đổi cách chúng ta tiếp cận, ghi nhớ và làm chủ ngôn ngữ mới thông qua sự kết hợp giữa khoa học và công nghệ.</p>
     </div>
 
-    <section style="padding: 60px 0; background: #f8fafc;">
-        <h2 style="text-align: center; font-size: 28px; font-weight: 800; color: #1e1b4b; margin-bottom: 40px;">Lợi Ích Khi Đồng Hành Cùng WordWise</h2>
-        <div class="grid-2-col">
-            <div class="feature-box">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-                <h3>Tiết kiệm thời gian, tối ưu kết quả</h3>
-                <p>Không cần học dồn, thuật toán AI sẽ tự động phân phối các bài tập ngắn gọn chỉ 15 phút mỗi ngày.</p>
+    <main class="intro-container">
+        
+        <section class="story-section">
+            <h2>Câu chuyện của chúng tôi</h2>
+            <p>Học ngoại ngữ từ lâu đã gắn liền với những cuốn vở chép tay dày cộp và những buổi nhồi nhét từ vựng khô khan. Hầu hết người học đều gặp phải một vấn đề chung: <span class="highlight-text">Học rất nhanh nhưng quên cũng rất mau</span>. Nhận thấy sự lãng phí thời gian và công sức đó, WordWise đã ra đời.</p>
+            <p>Chúng tôi không xây dựng một cuốn từ điển điện tử thông thường. WordWise là một hệ sinh thái học tập được thiết kế dựa trên các nghiên cứu về tâm lý học hành vi và khả năng ghi nhớ của não bộ. Bằng cách số hóa phương pháp học Flashcard (thẻ ghi nhớ) và kết hợp với dữ liệu trực quan sinh động, chúng tôi biến những từ vựng trừu tượng thành những hình ảnh và định nghĩa có tính liên kết cao.</p>
+            <p>Sứ mệnh của chúng tôi là tạo ra một môi trường học tập nơi người dùng không còn cảm thấy áp lực. Việc mở WordWise mỗi ngày sẽ giống như một thói quen giải trí nhẹ nhàng, nhưng lại mang đến hiệu quả ghi nhớ ngôn ngữ sâu sắc và bền vững.</p>
+        </section>
+
+        <h2 class="values-title">Giá trị cốt lõi của nền tảng</h2>
+        <div class="values-grid">
+            
+            <div class="value-card">
+                <div class="value-number">01</div>
+                <h3>Phương pháp học thuận tự nhiên</h3>
+                <p>Não bộ con người xử lý hình ảnh nhanh hơn 60.000 lần so với văn bản. WordWise loại bỏ việc học vẹt bằng cách đính kèm hình ảnh minh họa, phiên âm IPA chuẩn và ví dụ thực tế cho từng từ vựng, giúp bạn ghi nhớ theo ngữ cảnh một cách tự nhiên nhất.</p>
             </div>
-            <div class="feature-box">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                <h3>Quản lý tiến độ dễ dàng</h3>
-                <p>Theo dõi xem bạn đã ghi nhớ từ vựng đến mức độ nào thông qua thanh quá trình trực quan.</p>
+
+            <div class="value-card">
+                <div class="value-number">02</div>
+                <h3>Sự cá nhân hóa tối đa</h3>
+                <p>Mỗi người có một mục tiêu học tập khác nhau. Hệ thống cho phép bạn tự do lựa chọn các chủ đề (Topic) từ cơ bản đến chuyên ngành (IT, Kinh doanh, Nghệ thuật...). Bạn học những gì bạn thực sự cần, không học lan man.</p>
             </div>
-            <div class="feature-box">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                <h3>Chủ động chọn chủ đề</h3>
-                <p>Từ IT & Tech, Business đến Travel. Hãy tự do lựa chọn nhóm từ vựng phù hợp với mục tiêu của bạn.</p>
+
+            <div class="value-card">
+                <div class="value-number">03</div>
+                <h3>Thiết kế tối giản & Tập trung</h3>
+                <p>Chúng tôi tin rằng sự phức tạp là kẻ thù của việc học. Giao diện của WordWise được lược bỏ mọi chi tiết thừa, mang ngôn ngữ thiết kế phẳng (Flat Design) kết hợp với không gian trắng (Whitespace) giúp đôi mắt của bạn luôn cảm thấy dễ chịu dù học trong thời gian dài.</p>
             </div>
-            <div class="feature-box">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"></path><polyline points="16 6 23 6 23 13"></polyline></svg>
-                <h3>Gia tăng động lực liên tục</h3>
-                <p>Thu thập XP, nâng cấp Level và duy trì ngọn lửa Streak giúp biến việc học thành một trò chơi thú vị.</p>
+
+            <div class="value-card">
+                <div class="value-number">04</div>
+                <h3>Game hóa (Gamification) quá trình học</h3>
+                <p>Cảm giác nhàm chán sẽ bị đánh bay bởi hệ thống điểm thưởng XP và chuỗi ngày học liên tục (Streak). Biến quá trình trau dồi từ vựng thành những cột mốc thú vị, kích thích não bộ tiết ra Dopamine để bạn luôn khao khát quay lại học vào ngày hôm sau.</p>
             </div>
+
         </div>
-    </section>
+    </main>
 
     <?php include 'footer.php'; ?>
+    
 </body>
 </html>

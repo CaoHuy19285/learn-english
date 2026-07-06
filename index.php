@@ -23,9 +23,11 @@
     <section class="hero-section">
         <h1>Nắm Trọn Từ Vựng Tiếng Anh<br>Cùng <span class="text-gradient">WordWise</span></h1>
         <p>Hệ thống học tập thông minh giúp bạn ghi nhớ từ vựng lâu dài, tối ưu thời gian học và cá nhân hóa lộ trình dựa trên trí tuệ nhân tạo.</p>
-        <div style="margin-top: 30px;">
-            <a href="register.php" class="btn-primary" style="padding: 14px 32px; font-size: 16px;">Bắt đầu học miễn phí</a>
-        </div>
+        <?php if (!isset($_SESSION['user_id'])): ?>
+<div style="margin-top: 30px;">
+    <a href="register.php" class="btn-primary" style="padding: 14px 32px; font-size: 16px;">Bắt đầu học miễn phí</a>
+</div>
+<?php endif; ?>
     </section>
 
     <section id="gioi-thieu" style="padding: 60px 0; background: #f8fafc;">
